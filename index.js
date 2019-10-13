@@ -4,10 +4,10 @@ var fs = require('fs');
 var extract = require('./extract');
 var wss = require('./websockets-server');
 
-var handleError = function(err, res){
-  //Bronze Challenge goes here
-  res.writeHead(404);
-  res.end();
+var handleError = function(req, res){
+  //Bronze Challenge
+  res.writeHead(302, { "Location": "http://" + req.headers['host'] + '/error.html' });
+  return res.end();
 };
 
 var server = http.createServer(function (req, res) {
@@ -17,10 +17,11 @@ var server = http.createServer(function (req, res) {
 
   fs.readFile(filePath, function(err, data){
     if(err){
-      handleError(err, res);
-      return;
+      handleError(req,res);
+      return res.end();
     }else{
       //Silver Challenge goes here
+      res.setHeader("Content-type", "text/html");
       res.end(data);
     }
   });
