@@ -21,13 +21,9 @@ var server = http.createServer(function (req, res) {
       handleError(req,res);
       return res.end();
     }else{
-      //Silver Challenge goes here
-      console.log(filePath);
-      console.log(req.url);
-      console.log(mime.getType(req.url)); //THIS RETURNS TEXT/HTML
-      //plain text, PDFs, audio files, and movies in app folder
-      //console.log(mime.getType(req));
-      res.setHeader("Content-type", "text/html");
+      //Silver Challenge
+      var mimeType = mime.getType(req.url); //returns MIME type for header
+      res.setHeader("Content-type", mimeType);
       res.end(data);
     }
   });
