@@ -17,13 +17,21 @@ ws.on('connection', function(socket){
     socket.send(msg);
   });
 
-  //Topic change commmand
-
   socket.on('message', function(data){
     console.log('message received: ' + data);
-    messages.push(data);
-    ws.clients.forEach(function(clientSocket){
-      clientSocket.send(data);
-    });
+    //Topic command
+    //Check sent message for a command (in this case, /topic)
+    if(data.substring(0,6) === '/topic'){
+      ws.clients.forEach(function(clientSocket){
+        clientSocket.send('*** Topic has changed to \''+ data.substring(7)+'\'');
+      });
+      messages.unshift('*** Topic is \''+data.substring(7)+'\'');
+    }
+    else{
+      messages.push(data);
+      ws.clients.forEach(function(clientSocket){
+        clientSocket.send(data);
+      });
+    }
   });
 });
